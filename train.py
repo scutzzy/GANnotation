@@ -34,10 +34,6 @@ data_loader = torch.utils.data.DataLoader(dataset, batch_size=config['batch_size
 data_iter = iter(data_loader)
 
 fix_input, fix_label, fix_target_1 = dataset.sample_fix()
-fix_input_2, fix_label_2, fix_target_2 = dataset.sample_fix_2()
-
-writer.add_image('Image_Target_1', 0.5*(fix_target_1.data.cpu().numpy().swapaxes(0,1).swapaxes(1,2) + 1), 1,dataformats='HWC')
-writer.add_image('Image_Target_2', 0.5*(fix_target_2.data.cpu().numpy().swapaxes(0,1).swapaxes(1,2) + 1), 1,dataformats='HWC')
 
 netG = Generator(c_dim = 68)
 netD = NLayerDiscriminator(input_nc = 3)
@@ -241,11 +237,7 @@ for train_epoch in range(config['max_epoch']):
             img_1,_,col_1 = netG(torch.cat((fix_input.view(1,3,128,128), fix_label.view(1,68,128,128)), dim = 1))
             writer.add_image('Image_Fix_1', 0.5*(img_1.data[0,:,:,:].cpu().numpy().swapaxes(0,1).swapaxes(1,2) + 1), train_iter,dataformats='HWC')
             writer.add_image('Image_Col_1', 0.5*(col_1.data[0,:,:,:].cpu().numpy().swapaxes(0,1).swapaxes(1,2) + 1), train_iter,dataformats='HWC')
-            
-            img_2,_,col_2 = netG(torch.cat((fix_input_2.view(1,3,128,128), fix_label_2.view(1,68,128,128)), dim = 1))
-            writer.add_image('Image_Fix_2', 0.5*(img_2.data[0,:,:,:].cpu().numpy().swapaxes(0,1).swapaxes(1,2) + 1), train_iter,dataformats='HWC')
-            writer.add_image('Image_Col_2', 0.5*(col_2.data[0,:,:,:].cpu().numpy().swapaxes(0,1).swapaxes(1,2) + 1), train_iter,dataformats='HWC')
-            
+
         if train_iter % 50000 == 1:
             torch.save(netD.state_dict(), "./save/D_epoch-{}-{}".format(train_epoch,train_iter))
             torch.save(netG.state_dict(), "./save/G_epoch-{}-{}".format(train_epoch,train_iter))
