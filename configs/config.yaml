@@ -1,0 +1,22 @@
+max_epoch: 30
+#Model Option
+gen:
+
+dis:
+  # Loss weight
+  loss_weight:
+    Adversarial: 1
+    Pixel_Reconstruction: 10
+    Self_Consistency: 100
+    Triple_Consistency: 100
+    Identity_Preserving: 1
+    Perceptual: 10
+    Total_Variation: 0.0001
+
+# optimization options
+batch_size: 16             # batch size
+learning_rate: 0.0001         # learing rate
+weight_decay: 0.0001          # weight decay
+beta1: 0.5                    # Adam parameter
+beta2: 0.9999                 # Adam parameter
+heatmap_size: 6               # the size of heatmap, corresponding to a unit 2D Gaussian.
